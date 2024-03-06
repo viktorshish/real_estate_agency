@@ -2,7 +2,6 @@ import dj_database_url
 import os
 
 from environs import Env
-
 env = Env()
 env.read_env()
 
@@ -28,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
 
     'property.apps.PropertyConfig',
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
