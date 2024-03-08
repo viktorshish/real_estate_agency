@@ -8,11 +8,18 @@ def normalize_phone_number(apps, schema_editor):
     Flat = apps.get_model('property', 'Flat')
     for flat in Flat.objects.all():
         parse_phone_number = phonenumbers.parse(flat.owners_phonenumber, 'RU')
-        pure_phone = phonenumbers.format_number(
-            parse_phone_number,
-            phonenumbers.PhoneNumberFormat.E164
-        )
-        Flat.objects.update_or_create(id=flat.id, defaults={'owner_pure_phone': pure_phone})
+        if phonenumbers.is_valid_number(parse_phone_number):
+            pure_phone = phonenumbers.format_number(
+                parse_phone_number,
+                phonenumbers.PhoneNumberFormat.E164
+            )
+            Flat.objects.update_or_create(id=flat.id, defaults={'owner_pure_phone': pure_phone})
+
+
+def move_backwards(apps, schema_editor):
+    Flat = apps.get_model('property', 'Flat')
+    for flat in Flat.objects.all():
+        Flat.objects.update_or_create(id=flat.id, defaults={'owner_pure_phone': None})
 
 
 class Migration(migrations.Migration):
@@ -22,5 +29,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(normalize_phone_number)
+        migrations.RunPython(normalize_phone_number, move_backwards)
     ]
