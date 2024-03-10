@@ -87,7 +87,11 @@ class Complaint(models.Model):
 
 
 class Owner(models.Model):
-    owners_name = models.CharField('ФИО владельца', max_length=200, db_index=True)
+    owners_name = models.CharField(
+        'ФИО владельца',
+        max_length=200,
+        db_index=True
+    )
     owners_phonenumber = models.CharField('Номер владельца', max_length=20)
     owner_pure_phone = PhoneNumberField(
         region='RU',
