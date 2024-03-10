@@ -12,13 +12,10 @@ class FlatAdmin(admin.ModelAdmin):
         'new_building',
         'construction_year',
         'town',
-        'owners_phonenumber',
-        'owner_pure_phone'
     ]
     list_editable = ['new_building']
     list_filter = ['new_building', 'rooms_number', 'has_balcony']
     raw_id_fields = ['like']
-
 
 
 class ComplaintAdmin(admin.ModelAdmin):
@@ -26,6 +23,8 @@ class ComplaintAdmin(admin.ModelAdmin):
 
 
 class OwnerAdmin(admin.ModelAdmin):
+    list_display = ['owners_name', 'owner_pure_phone']
+    search_fields = ['owners_name']
     raw_id_fields = ("flat",)
 
 
