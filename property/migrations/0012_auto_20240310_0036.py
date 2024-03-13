@@ -6,10 +6,11 @@ from django.db import migrations
 def bind_flats_to_owners(apps, schema_editor):
     Flat = apps.get_model('property', 'Flat')
     Owner = apps.get_model('property', 'Owner')
-
-    for owner in Owner.objects.all():
-        owner_flats = Flat.objects.filter(owner=owner.owners_name)
-        owner.flat.set(owner_flats)
+    owners = Owner.objects.all()
+    if owners.exists():
+        for owner in owners.iterator():
+            owner_flats = Flat.objects.filter(owner=owner.owners_name)
+            owner.flat.set(owner_flats)
 
 
 class Migration(migrations.Migration):

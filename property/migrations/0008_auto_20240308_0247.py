@@ -6,14 +6,16 @@ import phonenumbers
 
 def normalize_phone_number(apps, schema_editor):
     Flat = apps.get_model('property', 'Flat')
-    for flat in Flat.objects.all():
-        parse_phone_number = phonenumbers.parse(flat.owners_phonenumber, 'RU')
-        if phonenumbers.is_valid_number(parse_phone_number):
-            pure_phone = phonenumbers.format_number(
-                parse_phone_number,
-                phonenumbers.PhoneNumberFormat.E164
-            )
-            Flat.objects.update_or_create(id=flat.id, defaults={'owner_pure_phone': pure_phone})
+    flats = Flat.objects.all()
+    if flats.exists():
+        for flat in flats.iterator():
+            parse_phone_number = phonenumbers.parse(flat.owners_phonenumber, 'RU')
+            if phonenumbers.is_valid_number(parse_phone_number):
+                pure_phone = phonenumbers.format_number(
+                    parse_phone_number,
+                    phonenumbers.PhoneNumberFormat.E164
+                )
+                Flat.objects.update_or_create(id=flat.id, defaults={'owner_pure_phone': pure_phone})
 
 
 def move_backwards(apps, schema_editor):
